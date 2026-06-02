@@ -38,12 +38,25 @@ func main() {
 	}
 
 	parts := strings.Split(string(req), "\r\n")
+	// len := len(parts)
 	requestSplit := strings.Split(parts[0], " ")
 	// method := requestSplit[0]
-	response := fmt.Sprint("HTTP/1.1 404 Not Found\r\n\r\n")
-
-	if requestSplit[1] == "/" {
-		response = fmt.Sprint("HTTP/1.1 200 OK\r\n\r\n")
+	path := requestSplit[1]
+	// headers := parts[1 : len-2]
+	// requestBody := parts[len-1]
+	// fmt.Printf("method: %s headers: %s body: %s", method, headers, requestBody)
+	var response string
+	pathSplit := strings.Split(path, "/")
+	fmt.Println(len(pathSplit))
+	// if  {
+	// 	response = "HTTP/1.1 404 Not Found\r\n\r\n"
+	// }
+	if len(pathSplit) < 3 {
+		response = "HTTP/1.1 404 Not Found\r\n\r\n"
 	}
+	responseEcho := pathSplit[2]
+	// response = "HTTP/1.1 200 OK\r\n\r\n"
+	response = fmt.Sprintf("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: %d\r\n\r\n%s", len(pathSplit), responseEcho)
+	fmt.Println(pathSplit[2])
 	conn.Write([]byte(response))
 }
