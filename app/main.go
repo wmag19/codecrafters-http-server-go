@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net"
 	"os"
+	"strings"
 )
 
 // Ensures gofmt doesn't remove the "net" and "os" imports above (feel free to remove this!)
@@ -28,7 +30,20 @@ func main() {
 		os.Exit(1)
 	}
 	defer l.Close()
-	response := fmt.Sprint("HTTP/1.1 200 OK\r\n\r\n")
-	conn.Write([]byte(response))
 
+	req := make([]byte, 4096)
+	_, err = conn.Read(req)
+	if err != nil {
+		log.Printf("error reading request: %s", err)
+	}
+
+	parts := strings.Split(string(req), "\r\n")
+	requestSplit := strings.Split(parts[0], " ")
+	// method := requestSplit[0]
+	response := fmt.Sprint("HTTP/1.1 404 Not Found\r\n\r\n")
+
+	if requestSplit[1] == "/" {
+		response = fmt.Sprint("HTTP/1.1 200 OK\r\n\r\n")
+	}
+	conn.Write([]byte(response))
 }
