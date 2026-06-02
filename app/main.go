@@ -28,7 +28,7 @@ func main() {
 		os.Exit(1)
 	}
 	defer l.Close()
-	response := fmt.Sprint("HTTP/1.1 200 OK \r\n\r\n")
+	response := fmt.Sprint("HTTP/1.1 200 OK\r\n\r\n")
 	conn.Write([]byte(response))
 
 }
